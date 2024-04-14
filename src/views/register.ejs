@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <title>Register Page</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-6 mx-auto p-0">
+            <div class="card">
+                <div class="login-box">
+                    <div class="login-snip">
+                        <label for="tab-2" class="tab">Sign Up</label>
+                        <div class="login-space">
+                            <!-- Sử dụng thẻ form và chỉ định method và action -->
+                            <form id="registrationForm" class="sign-up-form" method="POST"
+                                action="/register">
+                                <div class="group">
+                                    <label for="user" class="label">First Name</label>
+                                    <input id="firstname" name="firstname" type="text" class="input"
+                                        placeholder="Create your firstname">
+                                    <div id="firstname-error" class="error-message"></div>
+                                </div>
+                                <div class="group">
+                                    <label for="user" class="label">Last Name</label>
+                                    <input id="lastname" name="lastname" type="text" class="input"
+                                        placeholder="Create your lastname">
+                                    <div id="lastname-error" class="error-message"></div>
+                                </div>
+                                <div class="group">
+                                    <label for="pass" class="label">Password</label>
+                                    <input id="password" name="password" type="password" class="input"
+                                        data-type="password" placeholder="Create your password">
+                                    <div id="password-error" class="error-message"></div>
+                                </div>
+                                <div class="group">
+                                    <label for="pass" class="label">Repeat Password</label>
+                                    <input id="repassword" name="repassword" type="password" class="input"
+                                        data-type="password" placeholder="Repeat your password">
+                                    <div id="repassword-error" class="error-message"></div>
+                                </div>
+                                <div class="group">
+                                    <label for="email" class="label">Email Address</label>
+                                    <input id="email" name="email" type="text" class="input"
+                                        placeholder="Enter your email address">
+                                    <div id="email-error" class="error-message"></div> <!-- Chỉnh sửa id cho phù hợp -->
+                                </div>
+                                <div class="group">
+                                    <input id="signup-button" type="submit" class="button" value="Sign Up"></input>
+                                    <!-- Sử dụng type="submit" để gửi form -->
+                                </div>
+                                <div class="hr"></div>
+                                <div class="foot">
+                                    <label for="tab-1">Already Member?</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="/js/login.js" type="application/javascript"></script> -->
+</body>
+
+</html>
