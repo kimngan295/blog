@@ -9,14 +9,12 @@ body {
 }
 
 .row {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
 }
-
 .col-md-6 {
     flex: 0 0 auto;
-    width: 50%;
-    /* Adjust as needed */
+    width: 50%; /* Adjust as needed */
 }
 
 .login-box {
@@ -216,15 +214,22 @@ a {
     color: #b3b3b3;
 }
 
-.separator {
-    margin: 0 5px; 
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
-.foot-links {
-    display: flex; 
-    align-items: center; 
-}
-
-.foot-links a {
-    margin-right: 10px; 
+/* Định dạng khi trạng thái trỏ chuột vào được kích hoạt */
+.button:hover {
+    background-color: #45a049;
 }

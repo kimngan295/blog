@@ -1,15 +1,15 @@
-// const { addUser } = require("../models/user")
 const { validateRegistration } = require("../validations/validation")
 const HttpStatus = require('http-status-codes');
 const bcrypt = require('bcrypt');
 const { addUser } = require("../models/user");
+const { generateKeyPair } = require('../utils/rsaCrypt')
 
 const registerPage = (req, res) => {
     res.render('register', { data: {} })
 }
 
 const registerUser = async (req, res) => {
-    
+
     try {
         const { firstname, lastname, password, repassword, email } = req.body
         console.log(firstname + ' ' + lastname + ' ' + password + ' ' + repassword + ' ' + email)
@@ -17,17 +17,7 @@ const registerUser = async (req, res) => {
         const validationErrors = await validateRegistration({ firstname, lastname, password, repassword, email })
 
         if (validationErrors.length > 0) {
-            // if (validationErrors.first_name) {
-            //     document.getElementById('firstname-error').textContent = firstname.message
-            // } else if (validationErrors.lastname) {
-            //     document.getElementById('lastname-error').textContent = lastname.message
-            // } else if (validationErrors.password) {
-            //     document.getElementById('password-error').textContent = password.message
-            // }else if(validationErrors.repassword){
-            //     document.getElementById('repassword-error').textContent = repassword.message
-            // } else if (validationErrors.email) {
-            //     document.getElementById('email-error').textContent = email.message
-            // }
+
             return res.status(HttpStatus.BAD_REQUEST).json({
                 message: 'Bad request!',
                 error_code: 'INVALID_INPUT',
@@ -37,9 +27,9 @@ const registerUser = async (req, res) => {
         }
 
         // generateKey
-        // const { publicKey, privateKey } = generateKeyPair()
-        // console.log('Generated Public Key:', publicKey)
-        // console.log('Generated Private Key:', privateKey)
+        const { publicKey, privateKey } = generateKeyPair()
+        console.log('Generated Public Key:', publicKey)
+        console.log('Generated Private Key:', privateKey)
 
         //Bcrypt hash password
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -49,6 +39,8 @@ const registerUser = async (req, res) => {
             last_name: lastname,
             email: email,
             password: hashedPassword,
+            rsa_public_key: publicKey,
+            rsa_private_key: privateKey
         }
 
         // Thêm user vào database
@@ -64,7 +56,7 @@ const registerUser = async (req, res) => {
 
     } catch (err) {
         console.log(err)
-        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error!', success: false })
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, success: false })
     }
 
 }

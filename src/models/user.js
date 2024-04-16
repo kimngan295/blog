@@ -1,4 +1,4 @@
-const { DataTypes  } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/connectDB')
 
 const User = sequelize.define('User', {
@@ -20,7 +20,7 @@ const User = sequelize.define('User', {
         allowNull: false,
         unique: true
     },
-    password:{
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -28,6 +28,14 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
+    },
+    rsa_public_key: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    rsa_private_key: {
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     updatedAt: {
         type: DataTypes.DATE,
@@ -40,16 +48,31 @@ const User = sequelize.define('User', {
 });
 
 async function addUser(data) {
-    try{
+    try {
         const user = await User.create(data)
         console.log('User created successfully', user.toJSON())
         return user
-    }catch(err){
+    } catch (err) {
         throw err
     }
 }
 
+async function findUserByEmail(email) {
+    try {
+        const user = await User.findOne({
+            where: { email: email }
+        });
+        // console.log('User found successfully', user.toJSON())
+        
+        return user;
+    } catch (error) {
+        console.error("Error finding user by email:", error.message);
+        throw error; 
+    }
+};
+
 module.exports = {
     User,
-    addUser
+    addUser,
+    findUserByEmail
 }
