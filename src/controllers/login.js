@@ -61,8 +61,9 @@ const loginUser = async (req, res) => {
             return res.status(HttpStatus.CONFLICT).json({ message: 'Wrong password', success: false })
         }
 
+        console.log(process.env.JWT_SECRET_KEY)
         const token = JWT.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, { expiresIn: '30m' })
-        JWT.decode(token)
+        JWT.decode()
         const tokenExpiration = JWT.decode(token).exp
 
         const refreshToken = JWT.sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
@@ -120,6 +121,8 @@ const refreshToken = (req, res) => {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error_code: 'Internal Server Error', success: false })
     }
 }
+
+
 
 
 module.exports = {

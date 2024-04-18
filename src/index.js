@@ -7,6 +7,9 @@ const initAPIRoute = require('./routes/router');
 
 dotenv.config()
 
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
+console.log(JWT_SECRET_KEY)
+
 const app = express()
 const hostname = process.env.HOST_NAME || 'localhost'
 const port = process.env.PORT || 3000
