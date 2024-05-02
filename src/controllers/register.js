@@ -1,18 +1,14 @@
-const { validateRegistration } = require("../validations/validation")
-const HttpStatus = require('http-status-codes');
-const bcrypt = require('bcrypt');
-const { addUser } = require("../models/user");
-const { generateKeyPair } = require('../utils/rsaCrypt')
+import {validateRegistration} from "../validations/validation.js";
+import HttpStatus from 'http-status-codes'; // Nhiều thư viện có export default
+import bcrypt from 'bcrypt'; // `bcrypt` thường có default export
+import { addUser } from "../models/user.js";
+import { generateKeyPair } from '../utils/rsaCrypt.js';
 
-const registerPage = (req, res) => {
-    res.render('register', { data: {} })
-}
-
-const registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
 
     try {
         const { firstname, lastname, password, repassword, email } = req.body
-        console.log(firstname + ' ' + lastname + ' ' + password + ' ' + repassword + ' ' + email)
+        // console.log(firstname + ' ' + lastname + ' ' + password + ' ' + repassword + ' ' + email)
 
         const validationErrors = await validateRegistration({ firstname, lastname, password, repassword, email })
 
@@ -59,9 +55,4 @@ const registerUser = async (req, res) => {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, success: false })
     }
 
-}
-
-module.exports = {
-    registerUser,
-    registerPage
 }

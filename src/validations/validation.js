@@ -1,6 +1,7 @@
-const validator = require('validator')
+import validator from 'validator'; // Nhập toàn bộ module như default import
+const { isEmail, isLength } = validator;
 
-const validateRegistration = async ({ firstname, lastname, password, repassword, email }) => {
+export const validateRegistration = async ({ firstname, lastname, password, repassword, email }) => {
     
     if (!firstname || !lastname || !password || !repassword || !email) {
         throw new Error('One or more required fields are missing');
@@ -28,7 +29,7 @@ const validateRegistration = async ({ firstname, lastname, password, repassword,
 
     if (!email) {
         errors.push({ field: 'email', message: 'Email is required' })
-    } else if (!validator.isEmail(email)) {
+    } else if (!isEmail(email)) {
         errors.push({ field: 'email', message: 'Invalid email format' })
     } else {
         // Placeholder for email existence check
@@ -36,7 +37,7 @@ const validateRegistration = async ({ firstname, lastname, password, repassword,
 
     if (!password) {
         errors.push({ field: 'password', message: 'Password is required' })
-    } else if (!validator.isLength(password, { min: 8 })) {
+    } else if (!isLength(password, { min: 8 })) {
         errors.push({ field: 'password', message: 'Password must be at least 8 characters long' })
     } else if (!passwordRegex.test(password)) {
         errors.push({ field: 'password', message: 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character' })
@@ -50,5 +51,3 @@ const validateRegistration = async ({ firstname, lastname, password, repassword,
 
     return errors;
 }
-
-module.exports = { validateRegistration };

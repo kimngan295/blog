@@ -1,10 +1,7 @@
-const bodyParser = require("body-parser");
+import bodyParser from 'body-parser';
 
-const bodyParserMiddleware = bodyParser.json();
-const bodyParserMiddlewareUrlencoded = bodyParser.urlencoded({ extended: true });
+const { json, urlencoded } = bodyParser;
+export const bodyParserMiddleware = json();
+export const bodyParserMiddlewareUrlencoded = urlencoded({ extended: true });
 
-module.exports = {
-    bodyParserMiddleware,
-    bodyParserMiddlewareUrlencoded
-};
 

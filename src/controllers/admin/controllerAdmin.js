@@ -4,4 +4,4 @@ const testEJS = async (req, res) => {
     })
 }
 
-module.exports = testEJS
+export default testEJS

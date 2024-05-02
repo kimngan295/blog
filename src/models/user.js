@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/connectDB')
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/connectDB.js';
 
-const User = sequelize.define('User', {
+export const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -47,7 +47,7 @@ const User = sequelize.define('User', {
     modelName: 'User'
 });
 
-async function addUser(data) {
+export async function addUser(data) {
     try {
         const user = await User.create(data)
         console.log('User created successfully', user.toJSON())
@@ -57,7 +57,7 @@ async function addUser(data) {
     }
 }
 
-async function findUserByEmail(email) {
+export async function findUserByEmail(email) {
     try {
         const user = await User.findOne({
             where: { email: email }
@@ -71,8 +71,3 @@ async function findUserByEmail(email) {
     }
 };
 
-module.exports = {
-    User,
-    addUser,
-    findUserByEmail
-}

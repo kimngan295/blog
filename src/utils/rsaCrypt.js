@@ -1,7 +1,7 @@
-const crypto = require('crypto');
+import { generateKeyPairSync, publicEncrypt, constants, privateDecrypt } from 'crypto';
 
-const generateKeyPair = () => {
-    return crypto.generateKeyPairSync('rsa', {
+export const generateKeyPair = () => {
+    return generateKeyPairSync('rsa', {
         modulusLength: 4096,
         publicKeyEncoding: {
             type: 'spki',
@@ -14,12 +14,12 @@ const generateKeyPair = () => {
     })
 }
 
-const encryptWithRSA = (publicKey, plaintext) => {
+export const encryptWithRSA = (publicKey, plaintext) => {
     try {
         console.log("Public Key:", publicKey);
-        const encryptedBuffer = crypto.publicEncrypt({
+        const encryptedBuffer = publicEncrypt({
             key: publicKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
+            padding: constants.RSA_PKCS1_OAEP_PADDING
         }, Buffer.from(plaintext))
         
         return encryptedBuffer.toString('base64')
@@ -29,21 +29,15 @@ const encryptWithRSA = (publicKey, plaintext) => {
     }
 }
 
-const decryptWithRSA = (privateKey, encryptedPassword) => {
+export const decryptWithRSA = (privateKey, encryptedPassword) => {
     try {
-        const decryptedBuffer = crypto.privateDecrypt({
+        const decryptedBuffer = privateDecrypt({
             key: privateKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
+            padding: constants.RSA_PKCS1_OAEP_PADDING
         }, Buffer.from(encryptedPassword, 'base64'))
         return decryptedBuffer.toString()
     } catch (error) {
         console.error('Error decrypting with RSA:', error.message)
         throw error
     }
-}
-
-module.exports = {
-    generateKeyPair,
-    encryptWithRSA,
-    decryptWithRSA
 }

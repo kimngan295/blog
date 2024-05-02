@@ -17,7 +17,7 @@ connection.connect(function(err){
 module.exports = connection;
 */
 
-const { Sequelize } = require('sequelize')
+import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('blog', 'root', '', {
     host: 'localhost',
@@ -29,4 +29,4 @@ sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(err => console.error('Unable to connect to the database:', err));
 
-module.exports = sequelize;
+export default sequelize;
