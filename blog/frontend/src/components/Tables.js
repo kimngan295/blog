@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
+import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Form, Modal, InputGroup } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -189,7 +188,19 @@ export const RankingTable = () => {
 
 export const PostTable = () => {
   const [posts, setPosts] = useState([]);
+  const [currentPost, setCurrentPost] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    author: '',
+    content: '',
+  });
+
   const totalPosts = posts.length;
+
+  const handleClose = () => {
+    setShowForm(false);
+  };
 
   useEffect(() => {
     axios.get('/get-all-post')
@@ -201,23 +212,83 @@ export const PostTable = () => {
       });
   }, []);
 
+  const handleUpdateClick = (post) => {
+    setCurrentPost(post);
+    console.log(post)
+    setShowForm(true);
+  };
+
+  useEffect(() => {
+    if (currentPost) {
+      console.log(currentPost);
+      setFormData({
+        title: currentPost.title || '',
+        author: currentPost.author || '',
+        content: currentPost.content || '',
+      });
+    }
+  }, [currentPost]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target; // Lấy tên và giá trị từ sự kiện
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value, // Cập nhật giá trị theo tên trường
+    }));
+  };
+
+  const handleUpdate = (event) => {
+    event.preventDefault();
+
+    if (formData) {
+      console.log(formData)
+    }
+
+    const data = {
+      id: currentPost.id,
+      title: formData.title,
+      author: formData.author,
+      content: formData.content
+    };
+
+    // console.log('data input: ', data);
+
+    axios.post('/update-post', data)
+      .then((response) => {
+        if (response.data) {
+          console.log('Update post successfully', response.data);
+          // console.log(currentPost)
+          setShowForm(false);
+          setPosts((prevPosts) => {
+            return prevPosts.map(post =>
+              post.id === currentPost.id ? { ...post, ...data } : post
+            );
+          });
+        } else {
+          console.warn('No data in response');
+        }
+      })
+      .catch((error) => {
+        console.error('Update post failed:', error);
+        alert('Update post failed: ' + error.message);
+      });
+  };
+
   const TableRow = (props) => {
     const { id, title, content, author, createdAt, updatedAt } = props;
 
+    const handleDeleted = (postId) => {
+      axios.post('/delete-post', { id: postId })
+        .then((response) => {
+          console.log('Deleted successfully', response.data)
+          setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
+        })
+        .catch((error) => {
+          console.error('Error deleting post:', error);
+        })
 
-
-    const handleDeleted = (postId) => {  
-      axios.post('/delete-post', {id: postId})
-      .then((response) => {
-        console.log('Deleted successfully', response.data)
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error('Error deleting post:', error);
-      })
-  
     }
-   
+
     return (
       <tr>
         <td id={id}>
@@ -227,7 +298,6 @@ export const PostTable = () => {
         </td>
         <td>
           <span className="fw-normal">
-        
             {title}
           </span>
         </td>
@@ -263,16 +333,19 @@ export const PostTable = () => {
               <Dropdown.Item>
                 <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
               </Dropdown.Item>
-              <Dropdown.Item>
+              <Dropdown.Item onClick={() => handleUpdateClick(props)}>
                 <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
               </Dropdown.Item>
               <Dropdown.Item onClick={() => handleDeleted(id)} className="text-danger">
-                <FontAwesomeIcon  icon={faTrashAlt} className="me-2" /> Remove
+                <FontAwesomeIcon icon={faTrashAlt} className="me-2" /> Remove
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+
         </td>
       </tr>
+
+
     );
   };
 
@@ -295,6 +368,62 @@ export const PostTable = () => {
             {posts.map(t => <TableRow key={`posts-${t.id}`} {...t} />)}
           </tbody>
         </Table>
+        {/* show form update post */}
+        <Modal show={showForm} onHide={handleClose}>
+          {console.log(formData.title)}
+          <Modal.Header closeButton>
+            <Modal.Title>Update Post</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form id='formSubmit' onSubmit={handleUpdate}>
+              <Form.Group className="mb-3" id='title'>
+                <Form.Label>Title</Form.Label>
+                <InputGroup >
+                  <Form.Control
+                    name='title'
+                    type="text"
+                    placeholder="Enter title"
+                    // defaultValue={currentPost.title}
+                    value={formData.title || ''}
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+              <Form.Group className="mb-3" id='author'>
+                <Form.Label>Author</Form.Label>
+                <InputGroup>
+                  <Form.Control
+                    name='author'
+                    type="text"
+                    placeholder="Enter author"
+                    value={formData.author || ''}
+                    // defaultValue={currentPost.author}
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+              <Form.Group className="mb-3" id='content'>
+                <Form.Label>Content</Form.Label>
+                <InputGroup>
+                  <Form.Control
+                    name='content'
+                    type="text"
+                    placeholder="Write content"
+                    // defaultValue={currentPost.content}
+                    value={formData.content || ''}
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button form='formSubmit' variant="primary" type='submit'>Update Task</Button>
+          </Modal.Footer>
+        </Modal>
         <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">
           <Nav>
             <Pagination className="mb-2 mb-lg-0">

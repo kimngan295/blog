@@ -1,7 +1,7 @@
 import testEJS from '../controllers/admin/controllerAdmin.js';
 import { registerUser } from '../controllers/register.js';
 import { loginUser } from '../controllers/login.js';
-import { getAllPost, createNewPost, deletedPost } from '../controllers/post.js';
+import { getAllPost, createNewPost, deletedPost, updatedPost } from '../controllers/post.js';
 
 
 export const RouterAdmin = (router) =>
@@ -12,3 +12,4 @@ export const RouterAdmin = (router) =>
         .get('/get-all-post', getAllPost)
         .post('/new-post', createNewPost)
         .post('/delete-post', deletedPost)
+        .post('/update-post', updatedPost)

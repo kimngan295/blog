@@ -31,13 +31,13 @@ export const Post = sequelize.define('Post', {
         allowNull: false,
         defaultValue: DataTypes.NOW
     }
-},{
+}, {
     sequelize,
     modelName: 'Post'
 });
 
-
-export async function addPost(data){
+// create a new Post
+export async function addPost(data) {
     try {
         const post = await Post.create(data);
         console.log('Add new post successully', post.toJSON())
@@ -47,7 +47,8 @@ export async function addPost(data){
     }
 };
 
-export async function deletePost(postId){
+// delete post
+export async function deletePost(postId) {
     try {
         const post = await Post.destroy({
             where: {
@@ -60,4 +61,40 @@ export async function deletePost(postId){
         throw new Error(error.message)
     }
 
+}
+
+// find post by id
+export async function findPostById(postId) {
+    try {
+        const post = await Post.findOne({
+            where: {
+                id: postId
+            }
+        });
+        console.log('Find post successully')
+        return post
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+// update post
+export async function updatePost(postId, data) {
+    try {
+        const post = await Post.update(
+            {
+                title: data.title,
+                content: data.content,
+                author: data.author
+            },
+            {
+                where: {
+                    id: postId
+                }
+            });
+        console.log('Update post successully')
+        return post
+    } catch (error) {
+        throw new Error(error.message)
+    }
 }

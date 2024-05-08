@@ -1,4 +1,4 @@
-import { Post, addPost, deletePost } from '../models/post.js';
+import { Post, addPost, deletePost, findPostById, updatePost } from '../models/post.js';
 import HttpStatus from 'http-status-codes';
 
 export const getAllPost = async (req, res) => {
@@ -45,6 +45,32 @@ export const deletedPost = async (req, res) => {
 
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message, success: false })
-    
+
+  }
+}
+
+export const updatedPost = async (req, res) => {
+  try {
+    const { id, title, author, content } = req.body
+
+    const postId = await findPostById(id)
+
+    if (!postId) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: 'Post not found!', success: false })
+    }
+
+    const data = {
+      title: title,
+      author: author,
+      content: content
+    }
+
+    const updatedPost = await updatePost(id, data)
+
+    if(updatedPost){
+      return res.status(HttpStatus.CREATED).json({ message: 'Updated successfully!', success: true })
+    }
+  } catch (error) {
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message, success: false })
   }
 }
