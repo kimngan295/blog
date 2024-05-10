@@ -3,6 +3,7 @@ export const Routes = {
     DashboardOverview: { path: "/dashboard/overview" },
     DashboardOverview: { path: "/" },
     Posts: { path: "/posts" },
+    Users: { path: "/users" },
     Settings: { path: "/settings" },
     Upgrade: { path: "/upgrade" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },

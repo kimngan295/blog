@@ -71,3 +71,12 @@ export async function findUserByEmail(email) {
     }
 };
 
+export async function getAllUser(){
+    try {
+        const users = await User.findAll();
+        return users;
+    } catch (error) {
+        console.error("Error finding user by email:", error.message);
+        throw error; 
+    }
+}

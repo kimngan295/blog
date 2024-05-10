@@ -35,6 +35,7 @@
     "@themesberg/react-bootstrap": "^1.4.1",
     "axios": "^1.6.8",
     "bootstrap": "5.0.0-beta1",
+    "caniuse-lite": "^1.0.30001616",
     "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.4",
     "moment-timezone": "^0.5.31",

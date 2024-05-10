@@ -107,7 +107,7 @@ export default () => {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" form='formSubmit' type='submit'>Create Task</Button>
+              <Button variant="primary" form='formSubmit' type='submit'>Create Post</Button>
             </Modal.Footer>
           </Modal>
 

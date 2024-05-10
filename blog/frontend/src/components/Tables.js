@@ -229,7 +229,7 @@ export const PostTable = () => {
     }
   }, [currentPost]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e) => { 
     const { name, value } = e.target; // Lấy tên và giá trị từ sự kiện
     setFormData((prevFormData) => ({
       ...prevFormData,
